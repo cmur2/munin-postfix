@@ -29,14 +29,11 @@ intervenes
 
 =item incoming
 
-Inbound mail from the network, or mail picked up by the local
-pickup(8) daemon from the maildrop directory.
+Inbound mail from the network.
 
-=item active
+=item outgoing
 
-Messages that the queue manager has opened for delivery. Only a limited number
-of messages is allowed to enter the active queue (leaky bucket strategy, for a
-fixed delivery rate).
+Mails that are sent to the network.
 
 =item deferred
 
@@ -104,14 +101,20 @@ case $1 in
 graph_title Postfix Mailqueue
 graph_vlabel Mails in queue
 graph_category postfix
-active.label active
+outgoing.label outgoing
+outgoing.info Outbound mail to the network
 deferred.label deferred
+deferred.info Mail queued for later delivery
 maildrop.label maildrop
+maildrop.info Not yet picked up mail submitted via Postfix sendmail(1) command
 incoming.label incoming
+incoming.info Inbound mail from the network
 corrupt.label corrupt
+corrupt.info Unreadable or damaged queue files
 hold.label held
+hold.info Messages placed in the "hold" queue awaiting administrator intervention
 EOF
-	for field in active deferred maildrop incoming corrupt hold; do
+	for field in outgoing deferred maildrop incoming corrupt hold; do
 		print_warning $field
 		print_critical $field
 	done
@@ -124,10 +127,10 @@ cd $SPOOLDIR >/dev/null 2>/dev/null || {
 }
 
 cat <<EOF
+outgoing.value `/opt/syslog5mins /var/log/mail.log | grep "postfix/smtp\[.*status=sent" | wc -l`
 deferred.value `(test -d deferred && find deferred -type f ) | wc -l`
-active.value `(test -d active && find active -type f ) | wc -l`
 maildrop.value `(test -d maildrop && find maildrop -type f ) | wc -l`
-incoming.value `(test -d incoming && find incoming -type f ) | wc -l`
+incoming.value `/opt/syslog5mins /var/log/mail.log | grep "postfix/pipe\[.*status=sent" | wc -l`
 corrupt.value `(test -d corrupt && find corrupt -type f ) | wc -l`
 hold.value `( test -d hold && find hold -type f ) | wc -l`
 EOF
