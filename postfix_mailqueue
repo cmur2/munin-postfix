@@ -104,7 +104,6 @@ case $1 in
 graph_title Postfix Mailqueue
 graph_vlabel Mails in queue
 graph_category postfix
-graph_total Total
 active.label active
 deferred.label deferred
 maildrop.label maildrop
