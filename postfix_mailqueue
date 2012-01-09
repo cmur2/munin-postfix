@@ -78,6 +78,9 @@ munin-node.
 
 =cut
 
+MAILLOG="/var/log/mail.log"
+SYSLOG5MINS="/opt/syslog5mins"
+
 # atempt to get spooldir via postconf, but environment overrides.
 
 # Remember that postconf is not available unless postfix is.
@@ -127,10 +130,10 @@ cd $SPOOLDIR >/dev/null 2>/dev/null || {
 }
 
 cat <<EOF
-outgoing.value `/opt/syslog5mins /var/log/mail.log | grep "postfix/smtp\[.*status=sent" | wc -l`
+outgoing.value `$SYSLOG5MINS $MAILLOG | grep "postfix/smtp\[.*status=sent" | wc -l`
 deferred.value `(test -d deferred && find deferred -type f ) | wc -l`
 maildrop.value `(test -d maildrop && find maildrop -type f ) | wc -l`
-incoming.value `/opt/syslog5mins /var/log/mail.log | grep "postfix/pipe\[.*status=sent" | wc -l`
+incoming.value `$SYSLOG5MINS $MAILLOG | grep "postfix/pipe\[.*status=sent" | wc -l`
 corrupt.value `(test -d corrupt && find corrupt -type f ) | wc -l`
 hold.value `( test -d hold && find hold -type f ) | wc -l`
 EOF
