@@ -20,6 +20,5 @@ action of postfix.
 syslog5mins
 -----------
 
-This little script returns the entries of a (syslog created) file of the last
-5 minutes.
-**You should modify the scripts location in postfix_mailqueue script!**
+This little bash function returns the entries of a file (created in format of
+syslog default template; especially timestamp) of the last 5 minutes.
