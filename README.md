@@ -44,5 +44,5 @@ Later you will set the *mail.log* path here, too.
 syslog5mins
 -----------
 
-This little script returns the entries of a (syslog created) file of the last
-5 minutes.
+This little bash function returns the entries of a file (created in format of
+syslog default template; especially timestamp) of the last 5 minutes.
