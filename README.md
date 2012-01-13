@@ -25,9 +25,8 @@ symlinkas *root* in /etc/munin/plugins by using e.g.:
 
 	cd /etc/munin/plugins; ln -s /your/path/to/postfix_mailqueue postfix_mailqueue
 
-Since this script does not honor a environment variable to locate your
-*mail.log* you currently have to set the `MAILLOG` variable (which defaults
-to */var/log/mail.log*) in the script's header.
+(In case you already used the original plugin you should remove the old symlink.
+Then **wait** about 10 minutes before add the new symlink described above.)
 
 Next make sure that munin is allowed or at least allows this script to read
 your *mail.log*. How to do this depends on your system.
@@ -39,7 +38,12 @@ where you should change/add a line to the `[postfix_mailqueue]` section:
 
 	group adm
 
-Later you will set the *mail.log* path here, too.
+If your *mail.log* is not located at */var/log/mail.log* (the default)
+you should add another line with your custom path:
+
+	env.maillog /var/log/mail.log
+
+**Don't forget to restart your munin-node deamon.**
 
 syslog5mins
 -----------
