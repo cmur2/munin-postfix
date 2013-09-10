@@ -81,8 +81,8 @@ munin-node.
 
 MAILLOG=${maillog:-/var/log/mail.log}
 MINUTES=${minutes:-5}
-OUTGOING_REGEX=${outgoing_regex:-postfix/smtp\[.*status=sent}
-INCOMING_REGEX=${incoming_regex:-postfix/pipe\[.*status=sent}
+OUTGOING_REGEX=${outgoing_regex:-"postfix/smtp\[.*status=sent"}
+INCOMING_REGEX=${incoming_regex:-"postfix/pipe\[.*status=sent"}
 
 # atempt to get spooldir via postconf, but environment overrides.
 
