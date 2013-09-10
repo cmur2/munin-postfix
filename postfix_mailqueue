@@ -95,7 +95,7 @@ SPOOLDIR=${spooldir:-$POSTCONFSPOOL}
 syslogXmins() {
 	MINUTES_MINUS_ONE=`expr $MINUTES - 1`
 	#for (( i = $MINUTES; i > 0; i-- )) ; do
-	for i in $(seq $MINUTES_MINUS_ONE 0) ; do
+	for i in $(seq 0 $MINUTES_MINUS_ONE) ; do
 		# In %_d the underscore is important since it demands `date`
 		# to pad with spaces (like syslog for e.g. "Jan  1" to "Jan  9")
 		# instead of zeros.
