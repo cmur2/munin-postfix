@@ -93,8 +93,9 @@ SPOOLDIR=${spooldir:-$POSTCONFSPOOL}
 . $MUNIN_LIBDIR/plugins/plugin.sh
 
 syslogXmins() {
-	for (( i = $MINUTES; i > 0; i-- )) ; do
-	#for i in 4 3 2 1 0; do
+	MINUTES_MINUS_ONE=`expr $MINUTES - 1`
+	#for (( i = $MINUTES; i > 0; i-- )) ; do
+	for i in $(seq $MINUTES_MINUS_ONE 0) ; do
 		# In %_d the underscore is important since it demands `date`
 		# to pad with spaces (like syslog for e.g. "Jan  1" to "Jan  9")
 		# instead of zeros.
