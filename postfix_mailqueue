@@ -80,6 +80,9 @@ munin-node.
 =cut
 
 MAILLOG=${maillog:-/var/log/mail.log}
+MINUTES=${minutes:-5}
+OUTGOING_REGEX=${outgoing_regex:-postfix/smtp\[.*status=sent}
+INCOMING_REGEX=${incoming_regex:-postfix/pipe\[.*status=sent}
 
 # atempt to get spooldir via postconf, but environment overrides.
 
@@ -89,9 +92,9 @@ SPOOLDIR=${spooldir:-$POSTCONFSPOOL}
 
 . $MUNIN_LIBDIR/plugins/plugin.sh
 
-syslog5mins() {
-	#for (( i = 4; i >= 0; i-- )) ; do
-	for i in 4 3 2 1 0; do
+syslogXmins() {
+	for (( i = $MINUTES; i > 0; i-- )) ; do
+	#for i in 4 3 2 1 0; do
 		# In %_d the underscore is important since it demands `date`
 		# to pad with spaces (like syslog for e.g. "Jan  1" to "Jan  9")
 		# instead of zeros.
@@ -144,10 +147,10 @@ cd $SPOOLDIR >/dev/null 2>/dev/null || {
 }
 
 cat <<EOF
-outgoing.value `syslog5mins $MAILLOG | grep "postfix/smtp\[.*status=sent" | wc -l`
+outgoing.value `syslogXmins $MAILLOG | grep "$OUTGOING_REGEX" | wc -l`
 deferred.value `(test -d deferred && find deferred -type f ) | wc -l`
 maildrop.value `(test -d maildrop && find maildrop -type f ) | wc -l`
-incoming.value `syslog5mins $MAILLOG | grep "postfix/pipe\[.*status=sent" | wc -l`
+incoming.value `syslogXmins $MAILLOG | grep "$INCOMING_REGEX" | wc -l`
 corrupt.value `(test -d corrupt && find corrupt -type f ) | wc -l`
 hold.value `( test -d hold && find hold -type f ) | wc -l`
 EOF
