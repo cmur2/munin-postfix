@@ -38,6 +38,11 @@ where you should change/add a line to the `[postfix_mailqueue]` section:
 
 	group adm
 
+If you use LMTP (e.g. with dovecot) and want to count delivery via LMTP as 'incoming'
+mail add another line with:
+
+	env.incoming_regex postfix/lmtp\\[.*status=sent
+
 If your *mail.log* is not located at */var/log/mail.log* (the default)
 you should add another line with your custom path:
 
